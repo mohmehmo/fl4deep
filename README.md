@@ -1,2 +1,2 @@
-# fl4deep
-A system-level fault localization technique for ML-based systems
+# FL4Deep
+A system-level fault localization approach for DL-based systems
