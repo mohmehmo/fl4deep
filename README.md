@@ -2,7 +2,7 @@
 A system-level fault localization approach for DL-based systems
 ***
 
-### Installing reasoning engine
+### Install reasoning engine
 In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` which is available <a href="https://www.swi-prolog.org/Download.html" target="_blank">here</a> and `EYE v10.0.5` which can be downloaded from this <a href="https://github.com/eyereasoner/eye" target="_blank">link</a>.
 
 ***
@@ -11,6 +11,8 @@ In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` which is available <
 2. __sample_scripts:__ this dicrectory includes some example usage of **_FL4Deep_** within DL codes. 
 ```
 ├── benchmark
+        ├── comparison
+        └── training       
 ├── sample_scripts
 ├── requirements.txt
 └── README.md 
@@ -70,4 +72,16 @@ def main_fl4ml():
 
 if __name__ == "__main__":
     main_fl4ml()
+```
+
+***
+### Prerequisites
+``` python
+Python       3.8 
+keras        2.8.0
+tensorflow   2.8.0
+numpy        1.23.3
+pandas       2.1.1
+scikit-learn 0.23.1
+rdflib       6.3.2
 ```
