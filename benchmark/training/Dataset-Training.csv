@@ -1,0 +1,76 @@
+bug type,Source ,ID/link
+Wrong network architecture,GitHub,https://github.com/vmelan/cifar-experiment/commit/d6f013c
+Problematic early stopping,GitHub,https://github.com/nchlis/keras_pix2pix/commit/5033eaa
+Wrong selection of loss function,GitHub,https://github.com/sarus-tech/tf2-published-models/commit/a83c151
+Suboptimal number of epochs,GitHub,https://github.com/sarus-tech/tf2-published-models/commit/a83c151
+Suboptimal number of epochs,GitHub,https://github.com/kcct-fujimotolab/keras-super-resolution/commit/a0532cf
+Wrong optimisation function,GitHub,https://github.com/ShyamPoovaiah/FacialKeypointsDetection/commit/6543925
+Wrong type of activation function,GitHub,https://github.com/ulmefors/Traffic-Sign-Classifier/commit/e6a48ce
+Missing dense layer,GitHub,https://github.com/eangelou/kerasma/commit/2a2a46f
+Suboptimal network structure,GitHub,https://github.com/airalcorn2/RankNet/commit/4d9f8a2
+Suboptimal network structure,GitHub,https://github.com/vmelan/cifar-experiment/commit/d6f013c
+Suboptimal learning rate,GitHub,https://github.com/NikhilM98/learning-deeplearning/commit/eb24906
+Suboptimal network structure,GitHub,https://github.com/caslei/keras/commit/9d7a233
+Suboptimal network structure,GitHub,https://github.com/dbczumar/mlflow-keras-mnist/commit/b29cab7
+Epsilon for adam optimizer,GitHub,https://github.com/ulmefors/Traffic-Sign-Classifier/commit/e02a510
+Suboptimal network structure,GitHub,https://github.com/jason71995/Keras_ODENet/commit/fb6576e
+Wrong type of activation function,GitHub,https://github.com/DanilaEremenko/NeuralNetwork/commit/eba6bed
+Suboptimal batch size,GitHub,https://github.com/MockingLee/ExpressionRecognition/commit/52e97fd
+Wrong filter size for convolution layer,GitHub,https://github.com/AlexGidiotis/Keras-tutorial-on-CNNs/commit/b5acb01
+Suboptimal network structure,GitHub,https://github.com/alexchungio/Keras-Learning-Advance/commit/3cfbfaf
+Suboptimal number of epochs,GitHub,https://github.com/shamitv/ImageClassifier/commit/4307b16
+Missing dropout layer,GitHub,https://github.com/shamitv/ImageClassifier/commit/d73cfe7
+Suboptimal learning rate,GitHub,https://github.com/zsoltzombori/keras_fashion_mnist_tutorial/commit/e17b8fb
+Suboptimal number of epochs,GitHub,https://github.com/William-An/keras-mnist/commit/720f5c7
+Suboptimal network structure,GitHub,https://github.com/dbczumar/mlflow-keras-mnist/commit/b29cab7
+Wrong type of activation function,SO,51930566
+Wrong layer type,GitHub,https://github.com/airalcorn2/RankNet/commit/4d9f8a2
+Wrong filter size for convolutional layer,GitHub,https://github.com/vmelan/cifar-experiment/commit/561c82e
+Wrong type of activation function,SO,48251943
+Wrong selection of loss function,SO,38648195
+Wrong type of activation function,SO,31880720
+Missing preprocessing,SO,39525358
+Suboptimal learning rate,SO,48934338
+Wrong selection of loss function,SO,34673164
+Wrong type of activation function,SO,48221692
+Wrong selection of loss function,GitHub,https://github.com/alexander-travov/gol_nn/commit/d9b30a0
+Suboptimal learning rate,GitHub,https://github.com/alexander-travov/gol_nn/commit/49bea76
+Suboptimal learning rate,SO,50306988
+Wrong type of activation function,SO,34311586
+Wrong type of activation function ,SO,50079585
+Missing preprocessing,SO,56103207
+Wrong type of activation function,SO,58844149
+Wrong API usage,SO,61706535
+Wrong tensor shape,SO,59325381
+Missing activation function,SO,48385830
+Wrong loss function,SO,55328966
+Wrong activation function,SO,59278771
+Missing preprocessing,SO,48594888
+Wrong optimisation function,SO,56380303
+Wrong preprocessing,SO,59282996
+"Wrong preprocessing, Learning rate",SO,58237726
+Learning rate,SO,37624102
+Wrong loss function,SO,39810655
+Wrong loss function,SO,41327601
+Wrong optimisation function,SO,41600519
+Wrong activation function,SO,42514960
+Learning rate,SO,44998910
+Wrong activation function,SO,46642627
+Wrong activation function,SO,46995209
+Learning rate,SO,51181393
+Epoch number,SO,37213388
+loss & activation functions mismatch,SO,46443566
+Wrong loss function,SO,59481096
+Wrong loss function,SO,59764734
+Wrong activation function,SO,61569976
+Wrong loss function,SO,64522751
+Wrong preprocessing,SO,63342205
+Wrong activation function,SO,56914715
+Wrong preprocessing,SO,72102257
+Wrong activation function,SO,51962128
+Missing preprocessing,SO,52448552
+Missing preprocessing,SO,54073177
+Suboptimal ,SO,57976140
+Missing preprocessing,SO,68458462
+Missing preprocessing,SO,56973955
+Wrong activation function,SO,59553390
