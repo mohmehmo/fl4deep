@@ -5,6 +5,8 @@ A system-level fault localization approach for DL-based systems
 1. __benchmark:__ this directory consists of datasets that are used for training and validation of **_FL4Deep_**.
 2. __sample_scripts:__ this dicrectory includes some example usage of **_FL4Deep_** within DL codes.
 ```
+├── Analyzer
+│    └── trace_training_log.py
 ├── Classifier
 │    ├── models
 │    └── classifier.py
@@ -17,6 +19,8 @@ A system-level fault localization approach for DL-based systems
 │    ├── kb_rootCauses.b3
 │    ├── kb_rules.b3
 │    └── rules.n3
+├── logs
+│    └── tmp_logs
 ├── sample_scripts
 ├── requirements.txt
 └── README.md 
