@@ -11,8 +11,8 @@ In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` which is available <
 2. __sample_scripts:__ this dicrectory includes some example usage of **_FL4Deep_** within DL codes. 
 ```
 ├── benchmark
-        ├── comparison
-        └── training       
+│     ├── comparison
+│     └── training       
 ├── sample_scripts
 ├── requirements.txt
 └── README.md 
@@ -20,6 +20,8 @@ In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` which is available <
 
 ***
 ### How to use **_FL4Deep_**
+After installing `SWI-Prolog` and `EYE`, you need to clone this reposotiry to have **_FL4Deep_** souce code. Then, you need to call two **_FL4Deep_** APIs within the DL code including `data_analysis` to extract required information regarding dataset and `fl4ml` as a keras callback to collect information regarding model, training and deployment environment. Here is an example usage of **_FL4Deep_** in a DL code for MNIST problem. 
+
 ```python
 import numpy as np
 from tensorflow import keras
