@@ -3,7 +3,7 @@ A system-level fault localization approach for DL-based systems
 ***
 
 ### Install reasoning engine
-In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` (available [here](https://www.swi-prolog.org/Download.html)) and `EYE v10.0.5` (access from [link](https://github.com/eyereasoner/eye)) as the reasoning engine.
+In this version of **_FL4Deep_**, we use `Euler Yet another proof Engine (EYE)` (available [here](https://github.com/eyereasoner/eye)) as the reasoning engine.
 
 ***
 ### Repository structure
