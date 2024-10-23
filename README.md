@@ -12,7 +12,10 @@ In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` which is available <
 ```
 ├── benchmark
 │     ├── comparison
-│     └── training       
+│     └── training
+├── Classifier
+│     ├── models
+│     ├── classifier.py       
 ├── sample_scripts
 ├── requirements.txt
 └── README.md 
