@@ -1,0 +1,426 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix fl4ml: <http://fl4ml.org/> .
+@prefix ml_system: <http://ml_system.org/> .
+@prefix ml_fault: <http://ml_fault.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix activeFunc: <http://fl4ml.org/model_activation_function> .
+
+
+# rule for checking CPU architecture mismatch in training and deployed environment.
+{
+    ml_system:train_env 
+        fl4ml:training_cpu ?train_cpu .
+    
+    ml_system:deploy_env 
+        fl4ml:deploy_cpu ?deploy_cpu .
+
+    ?train_cpu log:notEqualTo ?deploy_cpu .
+}
+=>
+{
+    ml_system:deployment_component
+        ml_fault:has_rootCause  ml_fault:mismatch_system_arch .
+} .
+
+# rule for checking Operating System mismatch in training and deployed environment.
+{
+    ml_system:train_env
+        fl4ml:training_os  ?train_os .
+
+    ml_system:deploy_env
+        fl4ml:deploy_os  ?deploy_os  .
+
+    ?train_os log:notEqualTo ?deploy_os .
+}
+=>
+{
+    ml_system:deployment_component 
+        ml_fault:has_rootCause ml_fault:mismatch_os .
+}.
+
+# rule for checking Python environment mismatch in training and deployed environment.
+{
+    ml_system:train_env 
+        fl4ml:python_version ?train_python_ver . 
+    
+    ml_system:deploy_env
+        fl4ml:python_version ?deploy_python_ver . 
+
+    ?train_python_ver log:notEqualTo ?deploy_python_ver .
+}
+=>
+{
+    ml_system:deployment_component 
+        ml_fault:has_rootCause ml_fault:mismatch_python_version .
+} .
+
+# rule for checking installed library mismatch in training and deployed environment.
+{
+    ?installed_lib a fl4ml:library ;
+        fl4ml:version_on_deploy_env ?version_on_train ;
+        fl4ml:version_on_train_env ?version_on_deploy .
+    
+    ?version_on_train log:notEqualTo ?version_on_deploy . 
+}
+=>
+{
+        ml_system:deployment_component 
+            ml_fault:has_rootCause ml_fault:mismatch_installed_lib_version .
+}.
+
+# rule for checking train/test ratio of the used dataset
+{
+    ml_system:dataset 
+        fl4ml:train_test_ratio_issue ?ttr_issue ;
+        fl4ml:train_test_ratio ?tr_ratio .
+
+    ?ttr_issue  
+        log:equalTo true .
+}
+=>
+{  
+    ml_system:data_component 
+        ml_fault:has_rootCause ml_fault:train_test_ratio_suboptimal .
+}.
+
+
+# Rules related to the model
+
+# rule for checking redundant activation functions
+{
+    ?ml_layer1 
+        a fl4ml:model_layer ;
+        fl4ml:has_active_func ?activeFunc_layer1 ;
+        fl4ml:next_layer ?ml_layer2 .
+
+    ?ml_layer2 
+        a fl4ml:model_layer ;
+        fl4ml:has_active_func ?activeFunc_layer2 .
+    
+    ?activeFunc_layer1 log:equalTo ?activeFunc_layer2 .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:unnecessary_activation .
+}.
+
+# rule to check consecutive layer compatibility
+{
+    ?ml_layer 
+        a fl4ml:conv2d ;
+        fl4ml:layer_input_shape  ?input_shape .
+    ?input_shape list:length ?input_shape_length . 
+    ?input_shape_length math:notEqualTo 4 .
+}
+=>
+{   
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:consecutive_layer_compatibility .
+}.
+
+
+
+{
+    ?ml_layer 
+        a fl4ml:dense ;
+        fl4ml:layer_input_shape  ?input_shape .
+    ?input_shape list:length ?input_shape_length . 
+    ?input_shape_length math:notEqualTo 2 .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:consecutive_layer_compatibility .
+}.
+
+
+# rule related to bias initializer
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:layer_bias_initializer ?layer_bias_initializer .
+    ?layer_bias_initializer log:notEqualTo fl4ml:zeros .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:null_biases_initialization .
+}.
+
+
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:layer_kernel_initializer ?layer_kernel_initializer .
+    ?layer_kernel_initializer log:notEqualTo fl4ml:glorotuniform .
+
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:asymmetric_units_initialization .
+} .
+
+
+# rule related to the activation function of learning layers
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        activeFunc:has_active_func ?layer_active_function .
+
+    ?layer_active_function a activeFunc:linear .
+    
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:non_linear_activation .
+}.
+
+# rule to check the activation function of the last layer
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:next_layer ml_system:nullLayer ;
+        fl4ml:layer_unit_num ?layer_unit_num ;
+        activeFunc:has_active_func ?layer_active_function .
+    
+    ?layer_unit_num
+        math:equalTo 2 .
+
+    ?layer_active_function 
+        log:notEqualTo ml_system:sigmoid .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:class_probability_conversion .
+} .
+
+# rule to check the activation function of the last layer
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:next_layer ml_system:nullLayer ;
+        fl4ml:layer_unit_num ?layer_unit_num ;
+        activeFunc:has_active_func ?layer_active_function .
+    
+    ?layer_unit_num
+        math:greaterThan 2 .
+
+    ?layer_active_function 
+        log:notEqualTo ml_system:softmax .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:class_probability_conversion .
+} .
+
+# rule to check the definition of loss function to be assigned to the last layer of the model
+{
+    ml_system:model
+        fl4ml:num_target_elements  ?model_target_elements .
+
+    ml_system:train_data
+        fl4ml:num_target_elements ?dataset_target_elements .
+
+    ?model_target_elements math:notEqualTo ?dataset_target_elements .
+
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause  ml_fault:valid_loss_linkage .
+}.
+
+# rule to check that intermediate output of the layers
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:layer_output_validity ?layer_output_validity .
+
+    ?layer_output_validity log:equalTo false . 
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:valid_intermediate_layer_output .
+}.
+
+# rule to check fault in the optimizer
+{
+    ml_system:training_logs fl4ml:has_training_fault ?training_fault .
+
+    ?training_fault log:equalTo "optimizer"
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:suboptimal_optimizer .
+}.
+
+
+# rule to check insufficiency of learning rate
+{
+    ml_system:training_logs fl4ml:has_training_fault ?training_fault .
+
+    ?training_fault log:equalTo "learning_rate"
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:suboptimal_learning_rate .
+}.
+
+
+# rule to check insufficiency of training iteration
+{
+    ml_system:training_logs fl4ml:has_training_fault ?training_fault .
+
+    ?training_fault log:equalTo "epoch"
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:insufficient_iteration .
+}.
+
+
+# rule to check optimality of the loss function
+# we may change this one to another loss fault
+{
+    ml_system:training_logs fl4ml:has_training_fault ?training_fault .
+
+    ?training_fault log:equalTo "loss"
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:valid_loss_linkage .
+}.
+
+# rule to check neurons suspension
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        rdf:type fl4ml:dropout ;
+        fl4ml:prev_layer ?dropout_prev_layer .
+
+    ?dropout_prev_layer 
+        rdf:type ?dropout_prev_layer_type .
+
+    ?dropout_prev_layer_type
+        log:notEqualTo fl4ml:max_pooling1d .
+    
+    ?dropout_prev_layer_type
+        log:notEqualTo fl4ml:max_pooling2d .
+
+    ?dropout_prev_layer_type
+        log:notEqualTo fl4ml:max_pooling3d .
+        
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:neurons_suspension .
+}.
+
+
+# rule to check representative estimation
+
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        rdf:type fl4ml:batchnormalization ;
+        fl4ml:next_layer ?batchnorm_next_layer .
+
+    ?batchnorm_next_layer 
+        rdf:type ?batchnorm_next_layer_type .
+
+    ?batchnorm_next_layer_type
+        log:notEqualTo fl4ml:dropout .
+        
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:representative_estimation .
+}.
+
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        rdf:type fl4ml:batchnormalization ;
+        fl4ml:prev_layer ?batchnorm_prev_layer .
+
+    ?batchnorm_prev_layer
+        fl4ml:has_bias_initializer ?layer_bias_initializer .
+
+    ?layer_bias_initializer 
+        log:equalTo true .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:useless_bias .
+}.
+
+
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:next_layer ml_system:nullLayer ;
+        activeFunc:has_active_func ?last_layer_active_function .
+
+    ml_system:model_training 
+        fl4ml:has_training_loss ?model_training_loss .
+    
+    ?last_layer_active_function log:equalTo fl4ml:softmax .
+
+    ?model_training_loss log:notEqualTo "categorical_crossentropy" .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:loss_activation_mismatch .
+}.
+
+
+{
+    ?ml_layer
+        rdfs:subClassOf fl4ml:ml_layer ;
+        fl4ml:next_layer ml_system:nullLayer ;
+        activeFunc:has_active_func ?last_layer_active_function .
+
+    ml_system:model_training 
+        fl4ml:has_training_loss ?model_training_loss .
+    
+    ?last_layer_active_function log:equalTo fl4ml:sigmoid .
+
+    ?model_training_loss log:notEqualTo "binary_crossentropy" .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause ml_fault:loss_activation_mismatch .
+}.
+
+{
+    ml_system:model_training 
+        fl4ml:has_training_loss ?model_training_loss .
+
+    ?model_training_loss 
+        log:equalTo "None" .
+}
+=>
+{
+    ml_system:model_component
+        ml_fault:has_rootCause  ml_fault:valid_loss_linkage .
+}.

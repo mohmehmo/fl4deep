@@ -1,0 +1,280 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix fl4ml: <http://fl4ml.org/> .
+@prefix ml_system: <http://ml_system.org/> .
+@prefix ml_fault: <http://ml_fault.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix activeFunc: <http://fl4ml.org/model_activation_function> .
+
+
+fl4ml:software_component 
+    rdf:type rdfs:Class .
+
+fl4ml:data_component
+    rdfs:subClassOf fl4ml:software_component .
+
+fl4ml:model_component
+    rdfs:subClassOf fl4ml:software_component .
+
+fl4ml:deployment_component
+    rdfs:subClassOf fl4ml:software_component .
+
+fl4ml:dataset 
+    rdf:type rdfs:Class .
+
+fl4ml:train_data 
+    rdfs:subClassOf fl4ml:dataset .
+
+fl4ml:valid_data 
+    rdfs:subClassOf fl4ml:dataset .
+
+fl4ml:test_data 
+    rdfs:subClassOf fl4ml:dataset .
+
+fl4ml:num_feature 
+    rdf:type rdf:Property ;
+    rdfs:domain fl4ml:train_data ;
+    rdfs:range xsd:integer .
+
+fl4ml:num_target 
+    rdf:type rdf:Property ;
+    rdfs:domain fl4ml:train_data ;
+    rdfs:range xsd:integer .
+
+fl4ml:num_sample 
+    rdf:type rdf:Property ;
+    rdfs:domain fl4ml:train_data ;
+    rdfs:domain fl4ml:valid_data ;
+    rdfs:domain fl4ml:test_data ;
+    rdfs:range xsd:integer .
+
+
+fl4ml:ml_layer
+    rdf:type rdfs:Class .
+
+fl4ml:conv2d rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:flatten rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:dropout rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:input rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:max_pooling1d rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:max_pooling2d rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:max_pooling3d rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:batchnormalization rdfs:subClassOf fl4ml:ml_layer .
+fl4ml:dense rdfs:subClassOf fl4ml:ml_layer .
+
+# a sample layer for previous/next layer of the first/last layer of the model
+fl4ml:nullLayer rdfs:subClassOf fl4ml:ml_layer .
+
+# ================== This is a test to check List data type in N3
+# fl4ml:listDataType
+#     rdf:type rdfs:Class .
+    
+
+# fl4ml:hasListDataType 
+#     rdf:type rdf:Property ;
+#     rdfs:domain rdfs:List ;
+#     rdfs:range fl4ml:listDataType .
+
+# fl4ml:sampleList 
+#     a fl4ml:listDataType ;
+#     fl4ml:hasListDataType "(None 13 13 32 )"^^rdf:List .
+
+
+fl4ml:next_layer 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer ;
+    rdfs:domain fl4ml:ml_layer .
+
+fl4ml:prev_layer 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer ;
+    rdfs:domain fl4ml:ml_layer .
+
+fl4ml:has_bias_initializer
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer ;
+    rdfs:domain xsd:boolean .
+
+fl4ml:layer_input_shape 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer .
+    # rdfs:domain rdf:List .
+
+fl4ml:layer_output_shape 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer ;
+    rdfs:domain rdf:List .
+
+
+fl4ml:ml_model rdf:type rdfs:Class .
+
+fl4ml:layer_of 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_layer ;
+    rdfs:domain  fl4ml:ml_model .
+
+fl4ml:dataset_of 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:dataset ;
+    rdfs:domain fl4ml:ml_model .
+
+fl4ml:model_training rdf:type rdfs:Class .
+
+fl4ml:batch 
+    rdf:type rdf:Property ;
+    rdfs:range xsd:integer ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:epoch 
+    rdf:type rdf:Property ;
+    rdfs:range xsd:integer ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:trainable_params 
+    rdf:type rdf:Property ;
+    rdfs:range xsd:integer ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:train_time 
+    rdf:type rdf:Property ;
+    rdfs:range xsd:integer ;
+    rdfs:domain fl4ml:model_training .
+
+# fl4ml:loss_function rdf:type rdfs:Class .
+# fl4ml:mse rdfs:subClassOf fl4ml:loss_function .
+# fl4ml:mae rdfs:subClassOf fl4ml:loss_function .
+# fl4ml:mape rdfs:subClassOf fl4ml:loss_function .
+
+fl4ml:has_training_loss 
+    rdf:type rdf:Property ;
+    # rdfs:range fl4ml:loss_function ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:optimizer rdf:type rdfs:Class .
+fl4ml:adam rdfs:subClassOf fl4ml:optimizer .
+fl4ml:sgd rdfs:subClassOf fl4ml:optimizer .
+fl4ml:adamw rdfs:subClassOf fl4ml:optimizer .
+
+fl4ml:training_optimizer 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:optimizer ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:train  
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:ml_model ;
+    rdfs:domain fl4ml:model_training .
+
+fl4ml:environment rdf:type rdfs:Class . 
+fl4ml:train_env rdfs:subClassOf fl4ml:environment .
+fl4ml:deploy_env rdfs:subClassOf fl4ml:environment .
+
+fl4ml:python_version 
+    rdf:type rdf:Property ;
+    rdfs:domain xsd:string ;
+    rdfs:range fl4ml:environment .
+
+# fl4ml:os rdf:type rdfs:Class .
+# fl4ml:win rdfs:subClassOf fl4ml:os .
+# fl4ml:linux rdfs:subClassOf fl4ml:os .
+# fl4ml:mac rdfs:subClassOf fl4ml:os .
+
+fl4ml:os 
+    rdf:type rdf:Property ;
+    rdfs:domain xsd:string ;
+    rdfs:range fl4ml:environment .
+
+
+# fl4ml:training_os rdf:type rdf:Property . 
+# fl4ml:training_os rdfs:domain fl4ml:train_env .
+# fl4ml:training_os rdfs:range fl4ml:os .
+
+# fl4ml:deploy_os rdf:type rdf:Property . 
+# fl4ml:deploy_os rdfs:domain fl4ml:deploy_env .
+# fl4ml:deploy_os rdfs:range fl4ml:os .
+
+# fl4ml:cpu_arch rdf:type rdfs:Class .
+# fl4ml:x86 rdfs:subClassOf fl4ml:cpu_arch .
+# fl4ml:x64 rdfs:subClassOf fl4ml:cpu_arch .
+
+fl4ml:cpu_arch 
+    rdf:type rdf:Property ;
+    rdfs:domain xsd:string ;
+    rdfs:range fl4ml:environment .
+
+# fl4ml:training_cpu rdf:type rdf:Property . 
+# fl4ml:training_cpu rdfs:domain fl4ml:train_env .
+# fl4ml:training_cpu rdfs:range fl4ml:cpu_arch .
+
+# fl4ml:deploy_cpu rdf:type rdf:Property . 
+# fl4ml:deploy_cpu rdfs:domain fl4ml:deploy_env .
+# fl4ml:deploy_cpu rdfs:range fl4ml:cpu_arch .
+
+fl4ml:library rdf:type rdfs:Class .
+# fl4ml:keras rdfs:subClassOf fl4ml:installed_libs .
+# fl4ml:tensorflow rdfs:subClassOf fl4ml:installed_libs .
+
+fl4ml:version_on_train_env 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:library  ;
+    rdfs:domain xsd:string .
+
+fl4ml:version_on_deploy_env 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:library ;
+    rdfs:domain xsd:string .
+
+fl4ml:training_logs rdf:type rdfs:Class .
+
+fl4ml:has_training_fault 
+    rdf:type rdf:Property ;
+    rdfs:range fl4ml:training_logs .
+
+# fl4ml:installed_version_on_train_env rdf:type rdf:Property .
+# fl4ml:installed_version_on_train_env rdfs:range fl4ml:library .
+# fl4ml:installed_version_on_train_env rdfs:domain xsd:string .
+
+# fl4ml:installed_version_on_deploy_env rdf:type rdf:Property .
+# fl4ml:installed_version_on_deploy_env rdfs:range fl4ml:library .
+# fl4ml:installed_version_on_deploy_env rdfs:domain xsd:string .
+
+# fl4ml:installed_version rdfs:range xsd:string .
+# fl4ml:installed_version rdfs:domain fl4ml:library .
+# fl4ml:installed_on rdf:type rdf:Property . 
+# fl4ml:installed_on rdfs:range fl4ml:library .
+# fl4ml:installed_on rdfs:domain fl4ml:environment .
+
+# fl4ml:training_libs rdf:type rdf:Property .
+# fl4ml:training_libs rdfs:domain fl4ml:train_env .
+# fl4ml:training_libs rdfs:range fl4ml:installed_libs .
+
+# fl4ml:deploy_libs rdf:type rdf:Property .
+# fl4ml:deploy_libs rdfs:domain fl4ml:deploy_env .
+# fl4ml:deploy_libs rdfs:range fl4ml:installed_libs .
+
+fl4ml:train_on_env 
+    rdf:type rdf:Property ;
+    rdfs:domain fl4ml:train_env ;
+    rdfs:range fl4ml:ml_model .
+
+fl4ml:deploy_on_env 
+    rdf:type rdf:Property ;
+    rdfs:domain  fl4ml:deploy_env ;
+    rdfs:range fl4ml:ml_model .
+
+# fl4ml:active_func
+#     rdf:type rdfs:Class .
+
+# fl4ml:has_active_func
+#     rdf:type rdf:Property ;
+#     rdfs:domain  fl4ml:active_func ;
+#     rdf:range fl4ml:ml_layer .
+
+fl4ml:layer_output_validity
+    rdf:type rdf:Property ;
+    rdfs:domain  xsd:boolean ;
+    rdfs:range fl4ml:ml_layer .

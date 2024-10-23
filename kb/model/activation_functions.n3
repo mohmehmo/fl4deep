@@ -1,0 +1,26 @@
+@prefix fl4ml: <http://fl4ml.org/> .
+@prefix ml_system: <http://ml_system.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix activeFunc: <http://fl4ml.org/model_activation_function> .
+
+activeFunc:active_func 
+    rdf:type rdfs:Class . 
+
+activeFunc:has_active_func 
+    rdf:type rdf:Property ;
+    rdfs:domain  activeFunc:active_func ;
+    rdf:range fl4ml:ml_layer .
+
+fl4ml:sigmoid 
+    rdfs:subClassOf activeFunc:active_func .
+
+fl4ml:tanh 
+    rdfs:subClassOf activeFunc:active_func .
+
+fl4ml:softmax 
+    rdfs:subClassOf activeFunc:active_func .
+
+

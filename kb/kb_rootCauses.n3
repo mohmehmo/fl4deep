@@ -1,0 +1,148 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix fl4ml: <http://fl4ml.org/> .
+@prefix ml_system: <http://ml_system.org/> .
+@prefix ml_fault: <http://ml_fault.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix activeFunc: <http://fl4ml.org/model_activation_function> .
+
+
+fl4ml:root_cause 
+    rdf:type rdfs:Class .
+
+
+fl4ml:fault
+    rdf:type rdfs:Class .
+    # it should be defined the symptoms of the fault
+
+
+ml_fault:has_rootCause 
+    a rdf:Property ;
+    rdfs:domain fl4ml:root_cause .
+    # rdfs:range fl4ml:software_component  .
+
+
+ml_fault:root_cause_probability 
+    a rdf:Property ;
+    rdfs:domain xsd:decimal ;
+    rdfs:range fl4ml:root_cause .
+
+
+# Rules regarding data
+ml_fault:rootCause_data
+    rdfs:subClassOf fl4ml:root_cause .
+
+ml_fault:train_test_ratio_suboptimal
+    a ml_fault:rootCause_data ;
+    ml_fault:root_cause_probability 0.00 ;
+    rdfs:label "Dataset is split to train and test suboptimally" .
+
+
+# Rules regarding model
+ml_fault:rootCause_model
+    rdfs:subClassOf fl4ml:root_cause .
+
+ml_fault:null_biases_initialization
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.10 ;
+    rdfs:label "The initialization of biases is preferred to be zeros." .
+
+ml_fault:unnecessary_activation
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.45 ;
+    rdfs:label "Multiple and redundant connected activations are not allowed." .
+
+ml_fault:consecutive_layer_compatibility
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.25 ;
+    rdfs:label "A processing layer that operates on an N-dimensional tensor, should receive a valid input tensor with exactly N-dimensional shape." .
+
+ml_fault:asymmetric_units_initialization
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.2 ;
+    rdfs:label "The initialization of weights should not be constant to break the symmetry between neurons" .
+
+ml_fault:non_linear_activation
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.23 ;
+    rdfs:label "Activations for learning layers should be a non-linear function" .
+
+ml_fault:class_probability_conversion
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.28 ;
+    rdfs:label "A last layer activation is required to transform the logits into probabilities for classification problems" .
+
+ml_fault:valid_loss_linkage
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.22 ;
+    rdfs:label "The loss should be correctly defined and connected to the last layer activation in accordance with its input conditions" .
+
+ml_fault:valid_intermediate_layer_output
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "The intermediate output of the layers should not be None or any similar values." .
+
+ml_fault:suboptimal_optimizer 
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "The optimizer should be properly defined and integrated into the computational graph." .
+
+ml_fault:suboptimal_learning_rate
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "Learning rate is insufficient for achieving good accuracy." .
+
+ml_fault:insufficient_iteration
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "number of epochs is inadequate to reach the best model accuracy." .
+
+ml_fault:neurons_suspension
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "The dropout layer must be placed after the maximum pooling layer to be more effective." .
+
+ml_fault:representative_estimation
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "The 'batchnorm' layer should be before the dropout." .
+
+ml_fault:useless_bias
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "A learning layer should no longer include a bias when it is followed by 'batchnorm'." .
+
+ml_fault:loss_activation_mismatch:
+    a ml_fault:rootCause_model ;
+    ml_fault:root_cause_probability 0.13 ;
+    rdfs:label "Loss and activation functions should be matched together to achieve good accuracy." .
+
+# Rules regarding deployment
+ml_fault:rootCause_deployment 
+    rdfs:subClassOf fl4ml:root_cause .
+
+ml_fault:mismatch_system_arch
+    a ml_fault:rootCause_deployment ;
+    ml_fault:root_cause_probability 0.45 ;
+    rdfs:label "The architecture of system in the training environment and deployed environment do not match." .
+
+
+ml_fault:mismatch_installed_lib_version
+    a ml_fault:rootCause_deployment ;
+    ml_fault:root_cause_probability 0.05 ;
+    rdfs:label "The version of installed libraries in the training environment and deployed environment do not match." .
+
+
+ml_fault:mismatch_os
+    a ml_fault:rootCause_deployment ;
+    ml_fault:root_cause_probability 0.034 ;
+    rdfs:label "The used operating system in the training environment and deployed environment do not match." .
+
+ml_fault:mismatch_python_version 
+    a ml_fault:rootCause_deployment ;
+    ml_fault:root_cause_probability 0.23 ;
+    rdfs:label "The version of Python in the training environment and deployed environment do not match." .

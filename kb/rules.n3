@@ -1,0 +1,12 @@
+# this file includes high-level rules which are applied to all facts
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+{
+    ?classA a rdfs:Class .
+    ?subjectA rdfs:subClassOf ?classA .
+    ?subjectB a ?subjectA .
+}
+=>
+{
+    ?subjectB rdfs:subClassOf ?classA .
+}.
