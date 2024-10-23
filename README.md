@@ -10,12 +10,18 @@ In this version of **_FL4Deep_**, we use `SWI-Prolog 9.2.2` (available [here](ht
 1. __benchmark:__ this directory consists of datasets that are used for training and validation of **_FL4Deep_**.
 2. __sample_scripts:__ this dicrectory includes some example usage of **_FL4Deep_** within DL codes.
 ```
-├── benchmark
-│     ├── comparison
-│     └── training
 ├── Classifier
-│     ├── models
-│     └── classifier.py       
+│    ├── models
+│    └── classifier.py
+├── benchmark
+│    ├── comparison
+│    └── training
+├── kb
+│    ├── model
+│    ├── kb.b3
+│    ├── kb_rootCauses.b3
+│    ├── kb_rules.b3
+│    └── rules.n3
 ├── sample_scripts
 ├── requirements.txt
 └── README.md 
