@@ -1,11 +1,6 @@
 # FL4Deep
 A system-level fault localization approach for DL-based systems
 ***
-
-### Install reasoning engine
-In this version of **_FL4Deep_**, we use `Euler Yet another proof Engine (EYE)` (available [here](https://github.com/eyereasoner/eye)) as the reasoning engine.
-
-***
 ### Repository structure
 1. __benchmark:__ this directory consists of datasets that are used for training and validation of **_FL4Deep_**.
 2. __sample_scripts:__ this dicrectory includes some example usage of **_FL4Deep_** within DL codes.
@@ -29,7 +24,8 @@ In this version of **_FL4Deep_**, we use `Euler Yet another proof Engine (EYE)` 
 
 ***
 ### How to use **_FL4Deep_**
-After installing `SWI-Prolog` and `EYE`, you need to clone this reposotiry to have **_FL4Deep_** souce code. Then, you need to call two **_FL4Deep_** APIs within the DL code including `data_analysis` to extract required information regarding dataset and `fl4ml` as a keras callback to collect information regarding model, training and deployment environment. Here is an example usage of **_FL4Deep_** in a DL code for MNIST problem. 
+In this version of **_FL4Deep_**, we use `Euler Yet another proof Engine (EYE)` (available [here](https://github.com/eyereasoner/eye)) as the reasoning engine.
+After installing `EYE`, you need to clone this reposotiry to have **_FL4Deep_** souce code. Then, you need to call two **_FL4Deep_** APIs within the DL code including `data_analysis` to extract required information regarding dataset and `fl4ml` as a keras callback to collect information regarding model, training and deployment environment. Here is an example usage of **_FL4Deep_** in a DL code for MNIST problem. 
 
 ```python
 import numpy as np
